@@ -71,7 +71,7 @@ function howSection() {
   setStep(0);
 
   // --- Capture demo
-  const monitor = $('.monitor'), scr = $('.monitor__screen'), flash = $('.monitor__flash'), strip = $('.filmstrip'), dot = $('.indicator__dot');
+  const monitor = $('.monitor'), scr = $('.monitor__screen'), flash = $('.monitor__flash'), strip = $('.filmstrip');
   const work = [['code', '#3ed6b5'], ['terminal', '#3ed6b5'], ['browser', '#8c7cff'], ['chat', '#ff5b36'], ['code', '#3ed6b5'], ['design', '#ff8fb8'], ['meeting', '#ffb03b'], ['doc', '#8c7cff']];
   let wi = 0, seed = 1, demoTimer = null, running = false;
   const SPEED = { 1: 0.45, 5: 0.8, 10: 1.25, 20: 1.8, 30: 2.4, 60: 3.4 };
@@ -81,7 +81,6 @@ function howSection() {
   for (let i = 0; i < 7; i++) { const d = document.createElement('div'); d.className = 'fs'; const [k, a] = work[(i + 3) % work.length]; d.innerHTML = screen(k, 50 + i, a); strip.appendChild(d); }
   function shot() {
     flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
-    dot.classList.add('on'); setTimeout(() => dot.classList.remove('on'), 160);
     const d = document.createElement('div'); d.className = 'fs'; d.innerHTML = scr.innerHTML;
     strip.prepend(d);
     gsap.fromTo(d, { marginLeft: -110, opacity: 0 }, { marginLeft: 0, opacity: 1, duration: 0.7, ease: 'expo.out' });
@@ -112,7 +111,7 @@ function howSection() {
   $('.lens__frame').innerHTML = screen('code', 7, '#3ed6b5');
   $$('.lens__boxes span').forEach((s) => { const t = s.textContent; s.textContent = ''; const b = document.createElement('b'); b.className = 'lb'; b.textContent = t; s.appendChild(b); });
   const thought = $('.thought__t');
-  const lines = '用户在 VS Code 中修改 auth/session.go，终端出现 TokenExpiredError；随后打开 PR #128 回复评审意见。判断为：修复登录态过期的竞态条件 · 分类：构建';
+  const lines = '你在修复登录过期的问题，随后回复了代码评审。→ 归类为「构建」';
   let typing;
   function typeThought() {
     clearInterval(typing);
@@ -689,7 +688,7 @@ function alwaysSection() {
    ====================================================================== */
 function visitSection() {
   const { state, secs } = ctx;
-  const colors = ['#ff5b36', '#ffb03b', '#7aa2ff', '#f3efe7', '#ffdcae', '#ff6b3d', '#8c7cff', '#5a5a9a', '#2e2e55'];
+  const colors = ['#ff5b36', '#ffb03b', '#7aa2ff', '#f3efe7', '#ffdcae', '#ff6b3d', '#8c7cff', '#5a5a9a', '#3e3e70', '#2e2e55'];
   const band = $('.visit__band'), labels = $('.visit__labels');
   band.innerHTML = secs.map((_, i) => `<span style="--c:${colors[i]};flex-grow:0"></span>`).join('');
   labels.innerHTML = secs.map((s, i) => `<span style="--c:${colors[i]}"><i></i>${s.dataset.name} <b></b></span>`).join('');
