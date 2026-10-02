@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1 --port 5180",
     "build": "vite build",
-    "preview": "vite preview --port 5181"
+    "preview": "vite preview --port 5181",
+    "deploy": "bash scripts/deploy.sh"
   },
   "keywords": [],
   "author": "",
