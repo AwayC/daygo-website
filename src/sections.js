@@ -8,11 +8,11 @@ const fmt = (m) => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(Math
 const dur = (m) => (m >= 60 ? `${Math.floor(m / 60)} 小时${m % 60 ? ` ${m % 60} 分` : ''}` : `${m} 分钟`);
 
 export const CATS = [
-  { id: 'build', name: '构建', c: '#3ed6b5' },
-  { id: 'meet', name: '会议', c: '#ffb03b' },
-  { id: 'research', name: '研究', c: '#8c7cff' },
-  { id: 'talk', name: '沟通', c: '#ff5b36' },
-  { id: 'design', name: '设计', c: '#ff8fb8' },
+  { id: 'build', name: '构建', c: '#5fa8ff' },
+  { id: 'meet', name: '会议', c: '#ffb547' },
+  { id: 'research', name: '研究', c: '#9b8cff' },
+  { id: 'talk', name: '沟通', c: '#ff7a59' },
+  { id: 'design', name: '设计', c: '#e58bd0' },
   { id: 'system', name: 'System', c: '#8e8c99' },
 ];
 const catOf = (id) => CATS.find((c) => c.id === id) || CATS[0];
@@ -34,8 +34,29 @@ function inView(el, cb, opts = { threshold: 0.15 }) {
   io.observe(el);
 }
 
+const ICONS = {
+  today: '<path d="M3 6h18M3 12h12M3 18h7"/>',
+  review: '<rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/>',
+  weekly: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  tags: '<path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1.2"/>',
+  settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+};
+function sidebars() {
+  const items = [['today', '今天'], ['review', '回顾'], ['weekly', '统计'], ['tags', '分类'], ['settings', '设置']];
+  const cats = [['构建', '#5fa8ff', '3:46'], ['会议', '#ffb547', '0:34'], ['研究', '#9b8cff', '1:28'], ['沟通', '#ff7a59', '1:22'], ['设计', '#e58bd0', '0:33']];
+  $$('.win__side').forEach((side) => {
+    const act = side.dataset.active;
+    side.innerHTML = items.map(([k, n]) => `<div class="side__item${k === act ? ' on' : ''}"><svg viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>${n}</div>`).join('')
+      + '<div class="side__label">今天 · 7 小时 43 分</div>'
+      + cats.map(([n, c, h]) => `<div class="side__cat" style="--c:${c}"><i></i>${n}<b>${h}</b></div>`).join('')
+      + '<div class="side__rec"><i></i>正在记录 · 每 10 秒</div>';
+  });
+}
+
 export function initSections(c) {
   ctx = c;
+  sidebars();
+  $$('.mini-card, .block, .tile, .node, .prov, .dlbtn, .menu, .hud, .monitor, .thought, .lens').forEach((el) => el.classList.add('lg'));
   howSection();
   timelineSection();
   reviewSection();
@@ -72,7 +93,7 @@ function howSection() {
 
   // --- Capture demo
   const monitor = $('.monitor'), scr = $('.monitor__screen'), flash = $('.monitor__flash'), strip = $('.filmstrip');
-  const work = [['code', '#3ed6b5'], ['terminal', '#3ed6b5'], ['browser', '#8c7cff'], ['chat', '#ff5b36'], ['code', '#3ed6b5'], ['design', '#ff8fb8'], ['meeting', '#ffb03b'], ['doc', '#8c7cff']];
+  const work = [['code', '#5fa8ff'], ['terminal', '#5fa8ff'], ['browser', '#9b8cff'], ['chat', '#ff7a59'], ['code', '#5fa8ff'], ['design', '#e58bd0'], ['meeting', '#ffb547'], ['doc', '#9b8cff']];
   let wi = 0, seed = 1, demoTimer = null, running = false;
   const SPEED = { 1: 0.45, 5: 0.8, 10: 1.25, 20: 1.8, 30: 2.4, 60: 3.4 };
   let speed = SPEED[10];
@@ -108,7 +129,7 @@ function howSection() {
   }));
 
   // --- Understand
-  $('.lens__frame').innerHTML = screen('code', 7, '#3ed6b5');
+  $('.lens__frame').innerHTML = screen('code', 7, '#5fa8ff');
   $$('.lens__boxes span').forEach((s) => { const t = s.textContent; s.textContent = ''; const b = document.createElement('b'); b.className = 'lb'; b.textContent = t; s.appendChild(b); });
   const thought = $('.thought__t');
   const lines = '你在修复登录过期的问题，随后回复了代码评审。→ 归类为「构建」';
@@ -121,8 +142,8 @@ function howSection() {
   }
 
   // --- Organize
-  const cf = $('.card--hero .card__frames');
-  ['code', 'terminal', 'code', 'browser', 'code', 'chat'].forEach((k, i) => { const d = document.createElement('div'); d.innerHTML = screen(k, 20 + i, '#3ed6b5'); cf.appendChild(d); });
+  const cf = $('.vtl__frames');
+  ['code', 'terminal', 'code', 'browser', 'code', 'chat'].forEach((k, i) => { const d = document.createElement('div'); d.innerHTML = screen(k, 20 + i, '#5fa8ff'); cf.appendChild(d); });
 
 }
 
@@ -131,21 +152,21 @@ function howSection() {
    ====================================================================== */
 const DAY = [
   { s: '09:02', e: '09:24', cat: 'talk', t: '清理收件箱，准备站会', d: '回复了 6 封邮件，在站会文档里列出今天要推进的三件事。', k: ['chat', 'doc', 'browser'] },
-  { s: '09:24', e: '10:41', cat: 'build', t: '修复登录态过期的竞态条件', d: '在 session.go 中发现刷新 token 与并发请求的时序问题，加入单飞锁，并补充回归测试。', k: ['code', 'terminal', 'code', 'browser'] },
-  { s: '10:41', e: '11:15', cat: 'meet', t: '支付重构评审会', d: '和后端同学过了一遍幂等键方案，决定把回调重试移入队列。', k: ['meeting', 'doc', 'meeting'] },
-  { s: '11:15', e: '12:08', cat: 'research', t: '排查 WebSocket 断线重连', d: '对比心跳间隔与代理超时设置，确认断线来自网关 60 秒空闲断开。', k: ['browser', 'terminal', 'doc', 'browser'] },
+  { s: '09:24', e: '10:41', cat: 'build', t: '修复登录过期的问题', d: '找到了同时刷新登录状态时的冲突，修好并补上了测试。', k: ['code', 'terminal', 'code', 'browser'] },
+  { s: '10:41', e: '11:15', cat: 'meet', t: '支付重构评审会', d: '和后端同学过了一遍方案，决定失败重试交给队列来做。', k: ['meeting', 'doc', 'meeting'] },
+  { s: '11:15', e: '12:08', cat: 'research', t: '排查连接断开的原因', d: '对照文档检查了超时设置，确认是网关空闲太久会自动断开。', k: ['browser', 'terminal', 'doc', 'browser'] },
   { s: '12:08', e: '13:10', cat: 'system', t: '离开 · 午休', d: '屏幕锁定期间不会截图，这段时间只标记为离开。', k: ['away'] },
-  { s: '13:10', e: '14:32', cat: 'build', t: '实现离线缓存层', d: '为时间线接口加上本地缓存与失效策略，接入存储适配器。', k: ['code', 'code', 'terminal'] },
+  { s: '13:10', e: '14:32', cat: 'build', t: '实现离线缓存层', d: '让时间线在没网时也能打开，并决定缓存多久过期。', k: ['code', 'code', 'terminal'] },
   { s: '14:32', e: '15:05', cat: 'design', t: '和设计讨论空状态插画', d: '在设计稿上留言，对齐了时间线为空时的引导文案与插画方向。', k: ['design', 'chat', 'design'] },
   { s: '15:05', e: '15:40', cat: 'talk', t: '回复用户反馈 #482', d: '复现了导出时的时区错误，回复用户并建了修复任务。', k: ['chat', 'browser'] },
-  { s: '15:40', e: '17:20', cat: 'build', t: '为时间线写端到端测试', d: '新增 12 条端到端用例，覆盖编辑、删除与重新处理。', k: ['code', 'terminal', 'code', 'browser'] },
-  { s: '17:20', e: '17:55', cat: 'research', t: '阅读 SQLite WAL 文档', d: '整理了 WAL 模式下检查点的注意事项，记进团队文档。', k: ['doc', 'browser'] },
+  { s: '15:40', e: '17:20', cat: 'build', t: '为时间线写端到端测试', d: '新增 12 个测试，覆盖编辑、删除和重新整理。', k: ['code', 'terminal', 'code', 'browser'] },
+  { s: '17:20', e: '17:55', cat: 'research', t: '阅读数据库文档', d: '记下了几条关于数据安全写入的注意事项。', k: ['doc', 'browser'] },
   { s: '17:55', e: '18:20', cat: 'talk', t: '写每日回顾，发给团队', d: '把今天的亮点、完成项和阻塞项整理成站会文本。', k: ['doc', 'chat'] },
 ];
 const REFINE = {
-  build: [['梳理缓存失效策略', '按读写频率给接口分组，为每组设定失效时间，并写下取舍。'], ['实现本地存储适配器', '完成适配层并接入时间线接口，补了 4 条单元测试。'], ['重构 token 刷新流程', '把刷新逻辑收拢到一个模块，去掉了两处重复调用。']],
-  meet: [['对齐支付回调重试方案', '会上确定由队列负责重试，接口只保证幂等。']],
-  research: [['对比网关与代理超时配置', '列出三层超时设置，定位到 60 秒空闲断开。']],
+  build: [['决定缓存多久过期', '按使用频率分了组，给每组定了过期时间。'], ['做好离线存储', '时间线现在没网也能打开，补了 4 个测试。'], ['整理登录刷新逻辑', '把分散的代码收拢到一处，去掉了重复。']],
+  meet: [['对齐支付重试方案', '会上确定由队列负责重试，避免重复扣款。']],
+  research: [['找到断线的真正原因', '网关空闲一分钟就会断开，需要更频繁地打招呼。']],
   talk: [['复现并回复时区导出问题', '确认是导出时没有带上用户时区，已回复并建任务。'], ['同步今日进展到团队频道', '发出当日回顾，并 @ 了需要确认网关配置的同学。']],
   design: [['评审空状态插画两版方向', '更偏向第二版：更克制，也和新的视觉语言一致。']],
   system: [['离开 · 午休', '屏幕锁定期间不会截图。']],
@@ -450,26 +471,26 @@ function privacySection() {
   const svg = $('.vault__svg');
   svg.innerHTML = `
     <defs>
-      <radialGradient id="vg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff8a4c" stop-opacity=".22"/><stop offset=".7" stop-color="#8c7cff" stop-opacity=".06"/><stop offset="1" stop-color="#8c7cff" stop-opacity="0"/></radialGradient>
-      <linearGradient id="beam" gradientUnits="userSpaceOnUse" x1="490" y1="0" x2="640" y2="0"><stop offset="0" stop-color="#ffb03b"/><stop offset="1" stop-color="#ff5b36"/></linearGradient>
+      <radialGradient id="vg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ff8a4c" stop-opacity=".22"/><stop offset=".7" stop-color="#9b8cff" stop-opacity=".06"/><stop offset="1" stop-color="#9b8cff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="beam" gradientUnits="userSpaceOnUse" x1="490" y1="0" x2="640" y2="0"><stop offset="0" stop-color="#ffb547"/><stop offset="1" stop-color="#ff7a59"/></linearGradient>
     </defs>
     <circle cx="300" cy="230" r="200" fill="url(#vg)"/>
     <circle class="v-ring" cx="300" cy="230" r="190" fill="none" stroke="rgba(243,239,231,.28)" stroke-dasharray="2 6"/>
     <circle cx="300" cy="230" r="120" fill="none" stroke="rgba(243,239,231,.08)"/>
     <text x="300" y="28" text-anchor="middle">这台电脑</text>
     <g class="v-orbit"></g>
-    <g transform="translate(272 202) scale(.875)" style="color:#ffb03b"><use href="#mark" width="64" height="64"/></g>
+    <g transform="translate(272 202) scale(.875)" style="color:#ffb547"><use href="#mark" width="64" height="64"/></g>
     <g class="v-cloud">
       <path class="v-beam" d="M490 230 C 560 230, 580 230, 640 230" stroke="url(#beam)" stroke-width="2" fill="none" stroke-dasharray="6 8"/>
-      <rect x="640" y="196" width="150" height="68" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,176,59,.6)"/>
+      <rect x="640" y="196" width="150" height="68" rx="16" fill="rgba(255,255,255,.05)" stroke="rgba(255,181,71,.6)"/>
       <text x="715" y="226" text-anchor="middle" style="fill:#f3efe7">你配置的 AI</text>
       <text x="715" y="246" text-anchor="middle" style="font-size:10px">唯一出网路径</text>
     </g>
     <g class="v-local" opacity="0">
-      <path class="v-beam" d="M330 230 C 360 230, 370 230, 392 230" stroke="#3ed6b5" stroke-width="2" fill="none" stroke-dasharray="4 6"/>
-      <rect x="392" y="208" width="84" height="44" rx="12" fill="rgba(62,214,181,.12)" stroke="#3ed6b5"/>
-      <text x="434" y="234" text-anchor="middle" style="fill:#3ed6b5;font-size:11px">本地模型</text>
-      <text x="300" y="448" text-anchor="middle" style="fill:#3ed6b5">分析全程留在设备上</text>
+      <path class="v-beam" d="M330 230 C 360 230, 370 230, 392 230" stroke="#5fa8ff" stroke-width="2" fill="none" stroke-dasharray="4 6"/>
+      <rect x="392" y="208" width="84" height="44" rx="12" fill="rgba(95,168,255,.12)" stroke="#5fa8ff"/>
+      <text x="434" y="234" text-anchor="middle" style="fill:#5fa8ff;font-size:11px">本地模型</text>
+      <text x="300" y="448" text-anchor="middle" style="fill:#5fa8ff">分析全程留在设备上</text>
     </g>`;
   const orbit = $('.v-orbit', svg);
   const items = ['截图', '时间线', '日志', '数据库', '钥匙串'];
@@ -504,12 +525,12 @@ function privacySection() {
   // blocked apps → redacted placeholder frames
   const seq = [['code', 'IDE'], ['vault', null], ['browser', '浏览器'], ['chat', null], ['code', 'IDE'], ['bank', null], ['doc', '文档'], ['vault', null]];
   const strip = $('.redact-strip');
-  const KM = { vault: ['doc', '#ffb03b', '密码管理器'], chat: ['chat', '#ff6a45', '私人聊天'], bank: ['browser', '#8c7cff', '网上银行'] };
+  const KM = { vault: ['doc', '#ffb547', '密码管理器'], chat: ['chat', '#ff7a59', '私人聊天'], bank: ['browser', '#9b8cff', '网上银行'] };
   seq.forEach(([k, lbl], i) => {
     const d = document.createElement('div'); d.className = 'rf';
     const m = KM[k];
     d.dataset.app = m ? k : '';
-    d.innerHTML = (m ? screen(m[0], 90 + i, m[1]) : screen(k, 70 + i, '#3ed6b5')) + `<div class="rx">已屏蔽</div><span class="lbl">${m ? m[2] : lbl}</span>`;
+    d.innerHTML = (m ? screen(m[0], 90 + i, m[1]) : screen(k, 70 + i, '#5fa8ff')) + `<div class="rx">已屏蔽</div><span class="lbl">${m ? m[2] : lbl}</span>`;
     strip.appendChild(d);
   });
   const blocked = new Set(['vault']);
@@ -533,7 +554,7 @@ function aiSection() {
   let pIn = [], pOut = [], dot;
 
   function build() {
-    svg.innerHTML = '<defs><linearGradient id="chainGrad" x1="0" x2="1"><stop offset="0" stop-color="#3ed6b5"/><stop offset="1" stop-color="#8c7cff"/></linearGradient></defs>';
+    svg.innerHTML = '<defs><linearGradient id="chainGrad" x1="0" x2="1"><stop offset="0" stop-color="#5fa8ff"/><stop offset="1" stop-color="#9b8cff"/></linearGradient></defs>';
     const off = (el) => { let x = 0, y = 0; for (let n = el; n && n !== chain; n = n.offsetParent) { x += n.offsetLeft; y += n.offsetTop; } return [x, y]; };
     const rel = (el, side) => { const [x, y] = off(el); return [side === 'r' ? x + el.offsetWidth : x, y + el.offsetHeight / 2]; };
     const curve = ([x1, y1], [x2, y2]) => { const mx = (x1 + x2) / 2; return `M${x1} ${y1} C${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`; };
@@ -570,7 +591,7 @@ function aiSection() {
         await along(pIn[i]);
         provs[i].animate([{ transform: 'scale(1)' }, { transform: 'scale(1.02)' }, { transform: 'scale(1)' }], { duration: 400 });
         await along(pOut[i], 0.8);
-        out.animate([{ boxShadow: '0 0 0 0 rgba(62,214,181,.6)' }, { boxShadow: '0 0 0 18px rgba(62,214,181,0)' }], { duration: 800 });
+        out.animate([{ boxShadow: '0 0 0 0 rgba(95,168,255,.6)' }, { boxShadow: '0 0 0 18px rgba(95,168,255,0)' }], { duration: 800 });
         break;
       }
       dot.setAttribute('cx', -50);
@@ -648,7 +669,7 @@ function alwaysSection() {
   range.addEventListener('input', upd); upd();
 
   // categories
-  const swatches = ['#3ed6b5', '#ffb03b', '#8c7cff', '#ff5b36', '#ff8fb8', '#7ab8ff', '#c8f560', '#8e8c99'];
+  const swatches = ['#5fa8ff', '#ffb547', '#9b8cff', '#ff7a59', '#e58bd0', '#7fd1e8', '#ffd36e', '#8e8c99'];
   const cc = $('.catchips');
   const list = CATS.slice(0, 5).map((c) => ({ name: c.name, ci: swatches.indexOf(c.c) }));
   let added = 0;
@@ -688,7 +709,7 @@ function alwaysSection() {
    ====================================================================== */
 function visitSection() {
   const { state, secs } = ctx;
-  const colors = ['#ff5b36', '#ffb03b', '#7aa2ff', '#f3efe7', '#ffdcae', '#ff6b3d', '#8c7cff', '#5a5a9a', '#3e3e70', '#2e2e55'];
+  const colors = ['#ff7a59', '#ffb547', '#7aa2ff', '#f3efe7', '#ffdcae', '#ff7a59', '#9b8cff', '#5a5a9a', '#3e3e70', '#2e2e55'];
   const band = $('.visit__band'), labels = $('.visit__labels');
   band.innerHTML = secs.map((_, i) => `<span style="--c:${colors[i]};flex-grow:0"></span>`).join('');
   labels.innerHTML = secs.map((s, i) => `<span style="--c:${colors[i]}"><i></i>${s.dataset.name} <b></b></span>`).join('');

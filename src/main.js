@@ -76,7 +76,8 @@ export const state = { section: 0, interval: 10, paused: false, frames: 0, dwell
 state.dwell = secs.map(() => 0);
 state.framesBySec = secs.map(() => 0);
 
-let lastT = 0, lastLabel = '', lastNav = '', lastClock = '';
+let lastT = 0, lastLabel = '', lastNav = '', lastClock = '', lastGlow = '', lastHor = '';
+const rootStyle = document.documentElement.style;
 function frame(t) {
   const dt = Math.min(0.1, t - lastT); lastT = t;
   const y = getY(), vh = window.innerHeight, c = y + vh * 0.5;
@@ -90,6 +91,11 @@ function frame(t) {
   if (next && dEnd < w) sky = mixSky(m.sky, next.sky, smooth(0, 1, 0.5 - dEnd / (2 * w)));
   else if (prev && dStart < w) sky = mixSky(prev.sky, m.sky, smooth(0, 1, 0.5 + dStart / (2 * w)));
   gl?.setSky(sky);
+  // the glass picks up the light of the current hour
+  const glow = sky.sun.map((v) => Math.round(Math.min(1, v) * 255)).join(' ');
+  const hor = sky.hor.map((v) => Math.round(Math.min(1, v) * 255)).join(' ');
+  if (glow !== lastGlow) { rootStyle.setProperty('--glow', glow); lastGlow = glow; }
+  if (hor !== lastHor) { rootStyle.setProperty('--hor', hor); lastHor = hor; }
 
   // clock
   const endT = next ? next.time : 23 * 60 + 59;
@@ -194,7 +200,7 @@ $$('.section .h2, .dl__title').forEach((h) => {
   gsap.from(lines, { yPercent: 110, rotate: 2, duration: 1.3, ease: 'expo.out', stagger: 0.09, scrollTrigger: { trigger: h, start: 'top 85%' } });
 });
 $$('.kicker').forEach((k) => gsap.from(k.children, { y: 14, opacity: 0, duration: 0.9, stagger: 0.07, ease: 'power3.out', scrollTrigger: { trigger: k, start: 'top 90%' } }));
-const REVEAL = '.block, .tile, .daily, .weekly, .dlbtn, .node, .prov, .firstrun li, .tl__detail, .vault__viz, .vault__copy, .ai__head .body, .tl__tips, .privacy__en, .visit';
+const REVEAL = '.block, .tile, .win:not(.win--mini), .dlbtn, .node, .prov, .vault__viz, .vault__copy, .ai__head .body, .tl__tips, .privacy__en, .visit';
 gsap.set(REVEAL, { opacity: 0, y: 50 });
 const revealIO = new IntersectionObserver((entries) => {
   const els = entries.filter((e) => e.isIntersecting).map((e) => e.target);

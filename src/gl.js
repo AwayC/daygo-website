@@ -12,12 +12,12 @@ export const SKIES = {
   dawn:      P('#06071a', '#1a1840', '#ff6a3d', '#ffb26a', 0.02, 1.0, 0.55, 1.0),
   morning:   P('#0b1030', '#262a5c', '#c9765a', '#ffd9a8', 0.42, 0.42, 0.12, 0.6, 0.86),
   forenoon:  P('#0b1230', '#18214a', '#34467f', '#cfe0ff', 0.8, 0.22, 0.0, 0.15, 0.9),
-  noon:      P('#ebe6db', '#f2eee6', '#fbf6ea', '#ffffff', 0.95, 0.45, 0.0, 0.0, 0.6),
-  afternoon: P('#efe5d3', '#f4ebdd', '#ffdcae', '#ffe2b8', 0.55, 0.5, 0.0, 0.0, 0.18),
-  dusk:      P('#0f0b28', '#35204f', '#ff6b3d', '#ff8a4c', 0.0, 1.0, 0.25, 1.0, 0.72),
+  noon:      P('#dfe3f0', '#efebe6', '#fbe6cb', '#ffc978', 0.92, 0.85, 0.0, 0.0, 0.66),
+  afternoon: P('#e6dcd6', '#f2e6d8', '#ffd3a0', '#ffb766', 0.5, 0.95, 0.0, 0.0, 0.2),
+  dusk:      P('#0f0b28', '#35204f', '#ff7a59', '#ff8a4c', 0.0, 1.0, 0.25, 1.0, 0.72),
   evening:   P('#07071a', '#141331', '#45254f', '#ff7a4c', -0.35, 0.35, 0.6, 0.8, 0.8),
-  night:     P('#040407', '#08080f', '#12122a', '#8c7cff', -0.6, 0.0, 0.9, 0.5),
-  midnight:  P('#030305', '#060609', '#0e0e1e', '#8c7cff', -0.8, 0.0, 1.0, 0.35),
+  night:     P('#040407', '#08080f', '#12122a', '#9b8cff', -0.6, 0.0, 0.9, 0.5),
+  midnight:  P('#030305', '#060609', '#0e0e1e', '#9b8cff', -0.8, 0.0, 1.0, 0.35),
 };
 
 export function mixSky(a, b, t) {
@@ -228,7 +228,7 @@ export function createGL(canvas, { mobile = false } = {}) {
   // Frames
   const N = mobile ? 800 : 1500;
   const LANES = mobile ? 7 : 10;
-  const palette = ['#3ed6b5', '#ffb03b', '#8c7cff', '#ff5b36', '#ff8fb8'].map(hex);
+  const palette = ['#5fa8ff', '#ffb547', '#9b8cff', '#ff7a59', '#e58bd0'].map(hex);
   // a "day" of category segments along the ribbon
   const daySegs = [[0, .08, 3], [.08, .27, 0], [.27, .35, 1], [.35, .48, 2], [.48, .62, 0], [.62, .68, 4], [.68, .75, 3], [.75, .92, 0], [.92, 1, 2]];
   const segColor = (t) => { for (const s of daySegs) if (t >= s[0] && t < s[1]) return s[2]; return 0; };

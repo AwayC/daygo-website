@@ -115,13 +115,13 @@
           </div>
         </div>
         <div class="truth__bar">
-          <div class="truth__seg" style="--w:29%;--c:var(--tide)"><span>修复登录态过期的竞态</span></div>
+          <div class="truth__seg" style="--w:29%;--c:var(--sky)"><span>修复登录态过期的竞态</span></div>
           <div class="truth__seg" style="--w:21%;--c:var(--amber)"><span>评审支付重构 PR</span></div>
           <div class="truth__seg" style="--w:34%;--c:var(--dusk)"><span>排查 WebSocket 断线</span></div>
           <div class="truth__seg" style="--w:16%;--c:var(--dawn)"><span>与设计讨论空状态</span></div>
         </div>
         <div class="truth__cards">
-          <article class="mini-card" style="--c:var(--tide)"><div class="mono">09:24 — 10:16 · 52 分钟</div><h4>修复登录态过期的竞态</h4></article>
+          <article class="mini-card" style="--c:var(--sky)"><div class="mono">09:24 — 10:16 · 52 分钟</div><h4>修复登录态过期的竞态</h4></article>
           <article class="mini-card" style="--c:var(--amber)"><div class="mono">10:16 — 10:54 · 38 分钟</div><h4>评审支付重构 PR</h4></article>
           <article class="mini-card" style="--c:var(--dusk)"><div class="mono">10:54 — 12:04 · 1 小时 10 分</div><h4>排查 WebSocket 断线</h4></article>
           <article class="mini-card" style="--c:var(--dawn)"><div class="mono">12:04 — 12:26 · 22 分钟</div><h4>与设计讨论空状态</h4></article>
@@ -184,15 +184,18 @@
               <div class="thought mono"><span class="thought__k">model ›</span> <span class="thought__t"></span><i class="caret"></i></div>
             </div>
             <div class="stage__layer" data-layer="2">
-              <div class="stack">
-                <article class="card card--hero" style="--c:var(--tide)">
-                  <div class="card__top mono"><span>09:24 — 10:41</span><span class="chip-cat"><i></i>构建</span></div>
-                  <h4>修复登录态过期的竞态条件</h4>
-                  <p>找到了 token 刷新时的竞态问题，修复并补上测试，随后回复了评审意见。</p>
-                  <div class="card__frames"></div>
-                </article>
-                <article class="card card--ghost" style="--c:var(--amber)"><div class="card__top mono"><span>10:41 — 11:15</span><span class="chip-cat"><i></i>会议</span></div><h4>支付重构评审会</h4></article>
-                <article class="card card--ghost2" style="--c:var(--dusk)"><div class="card__top mono"><span>11:15 — 12:08</span><span class="chip-cat"><i></i>研究</span></div><h4>排查 WebSocket 断线重连</h4></article>
+              <div class="win lg win--mini">
+                <div class="win__bar">
+                  <span class="win__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+                  <b class="win__title">今天</b>
+                  <span class="win__date mono">10 月 2 日</span>
+                </div>
+                <div class="vtl">
+                  <div class="vtl__row" style="--c:var(--dawn)"><span class="mono">09:02</span><div class="vtl__card"><b>清理收件箱，准备站会</b><em class="mono">22 分钟 · 沟通</em></div></div>
+                  <div class="vtl__row is-open" style="--c:var(--sky)"><span class="mono">09:24</span><div class="vtl__card"><b>修复登录过期的问题</b><em class="mono">1 小时 17 分 · 构建</em><p>找到了 token 刷新时的竞态问题，修复并补上测试，随后回复了评审意见。</p><div class="vtl__frames"></div></div></div>
+                  <div class="vtl__row" style="--c:var(--amber)"><span class="mono">10:41</span><div class="vtl__card"><b>支付重构评审会</b><em class="mono">34 分钟 · 会议</em></div></div>
+                  <div class="vtl__row" style="--c:var(--dusk)"><span class="mono">11:15</span><div class="vtl__card"><b>排查连接断开的原因</b><em class="mono">53 分钟 · 研究</em></div></div>
+                </div>
               </div>
             </div>
             <div class="stage__progress mono"><span class="on">01</span><span>02</span><span>03</span></div>
@@ -212,6 +215,15 @@
             <li><b>拖选</b> 重新整理</li>
           </ul>
         </div>
+        <div class="win lg tl__win">
+          <div class="win__bar">
+            <span class="win__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <div class="win__seg" role="tablist"><button class="on" role="tab" aria-selected="true">时间线</button><a href="#review" role="tab">回顾</a></div>
+            <span class="win__date mono"><i aria-hidden="true">‹</i>今天 · 10 月 2 日<i aria-hidden="true">›</i></span>
+          </div>
+          <div class="win__body">
+            <aside class="win__side" data-active="today"></aside>
+            <div class="win__main">
         <div class="tl__band-wrap" data-cursor="拖选">
           <div class="tl__band" role="listbox" aria-label="今日时间线"></div>
           <div class="tl__sel"><button class="tl__reprocess mono" type="button">↻ 重新处理 <span></span></button></div>
@@ -237,15 +249,27 @@
             <div class="tl__viewer-meta mono"><span class="tl__fidx">帧 01 / 08</span><span class="tl__ftime"></span></div>
           </div>
         </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ====== 05 REVIEW · 15:30 Afternoon (light) ====== -->
-    <section class="review section" data-sky="afternoon" data-time="15:30" data-theme="light" data-label="午后" data-name="回顾">
+    <section class="review section" id="review" data-sky="afternoon" data-time="15:30" data-theme="light" data-label="午后" data-name="回顾">
       <div class="wrap">
         <div class="kicker mono"><span class="kicker__t">15:30</span><span>午后</span><span class="kicker__en">/ Daily &amp; weekly review</span></div>
         <h2 class="h2">站会，<br />一键写好。</h2>
-        <div class="review__grid">
+        <div class="win lg review__win">
+          <div class="win__bar">
+            <span class="win__lights" aria-hidden="true"><i></i><i></i><i></i></span>
+            <div class="win__seg" role="tablist"><a href="#timeline" role="tab">时间线</a><button class="on" role="tab" aria-selected="true">回顾</button></div>
+            <span class="win__date mono"><i aria-hidden="true">‹</i>第 40 周<i aria-hidden="true">›</i></span>
+          </div>
+          <div class="win__body">
+            <aside class="win__side" data-active="review"></aside>
+            <div class="win__main">
+          <div class="review__grid">
           <article class="daily">
             <header class="daily__head">
               <div><div class="mono label">每日回顾</div><div class="daily__date">10 月 2 日 · 周五</div></div>
@@ -253,7 +277,7 @@
             </header>
             <div class="daily__body">
               <div class="daily__col"><h5><i style="--c:var(--amber)"></i>亮点</h5><ul><li>修好了登录过期的问题</li><li>找到了连接断开的原因</li></ul></div>
-              <div class="daily__col"><h5><i style="--c:var(--tide)"></i>完成</h5><ul><li>登录修复 + 测试</li><li>评审支付改版</li><li>时间线测试 12 条</li><li>回复用户反馈</li></ul></div>
+              <div class="daily__col"><h5><i style="--c:var(--sky)"></i>完成</h5><ul><li>登录修复 + 测试</li><li>评审支付改版</li><li>时间线测试 12 条</li><li>回复用户反馈</li></ul></div>
               <div class="daily__col"><h5><i style="--c:var(--dawn)"></i>阻塞</h5><ul><li>等运维确认网关配置</li></ul></div>
             </div>
           </article>
@@ -270,6 +294,9 @@
             <div class="weekly__legend mono"></div>
             
           </article>
+        </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -307,9 +334,9 @@
             <div class="mono label">屏蔽应用</div>
             <h3 class="h4">敏感应用，自动屏蔽。</h3>
             <div class="apps">
-              <button class="app" data-app="vault"><span class="app__ico" style="--c:#FFB03B">◆</span><span><b>密码管理器</b></span><i class="sw"></i></button>
+              <button class="app" data-app="vault"><span class="app__ico" style="--c:#FFB547">◆</span><span><b>密码管理器</b></span><i class="sw"></i></button>
               <button class="app" data-app="chat"><span class="app__ico" style="--c:#FF6A45">●</span><span><b>私人聊天</b></span><i class="sw"></i></button>
-              <button class="app" data-app="bank"><span class="app__ico" style="--c:#8C7CFF">▲</span><span><b>网上银行</b></span><i class="sw"></i></button>
+              <button class="app" data-app="bank"><span class="app__ico" style="--c:#9B8CFF">▲</span><span><b>网上银行</b></span><i class="sw"></i></button>
             </div>
             <div class="redact-strip"></div>
             
@@ -398,7 +425,7 @@
           <article class="tile tile--theme" data-mode="dark">
             <div class="mono label">外观</div>
             <div class="seg seg--sm"><button data-t="light">浅色</button><button data-t="dark" class="on">深色</button><button data-t="system">跟随系统</button></div>
-            <div class="theme-prev"><div class="theme-prev__bar"></div><div class="theme-prev__row" style="--c:var(--tide)"></div><div class="theme-prev__row" style="--c:var(--amber);width:62%"></div><div class="theme-prev__row" style="--c:var(--dusk);width:78%"></div></div>
+            <div class="theme-prev"><div class="theme-prev__bar"></div><div class="theme-prev__row" style="--c:var(--sky)"></div><div class="theme-prev__row" style="--c:var(--amber);width:62%"></div><div class="theme-prev__row" style="--c:var(--dusk);width:78%"></div></div>
             <p class="body sm">浅色、深色，随你。</p>
           </article>
         </div>
