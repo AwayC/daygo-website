@@ -102,12 +102,13 @@ const STR = {
 };
 
 const listeners = [];
+// English unless the visitor picked a language with the nav switch.
 let lang = (() => {
   try {
     const saved = localStorage.getItem('daygo-lang');
     if (saved === 'zh' || saved === 'en') return saved;
   } catch { /* storage unavailable */ }
-  return (navigator.language || '').toLowerCase().startsWith('zh') ? 'zh' : 'en';
+  return 'en';
 })();
 
 export const getLang = () => lang;
