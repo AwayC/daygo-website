@@ -1,79 +1,82 @@
-# Daygo · Chronolight design system
+# Daygo site · design notes
 
-> **One scroll = one day.** The site turns Daygo's core idea ("discrete frames → AI organizes them → a continuous timeline") into a visual language.
-> This doc doubles as the reference for the upcoming app redesign: the tokens live in `src/styles.css` `:root`.
+> **Daygo is a cross-platform remake of [Dayflow](https://dayflow.so)** ([source](https://github.com/JerryZLiu/Dayflow); Swift, macOS only), rewritten in Go + Wails + Vue for macOS and Windows. The site says so in the hero pill, its own section and the footer.
+>
+> **One scroll = one day.** The page runs from sunrise (06:00) to midnight. The sky, the sun and the nav clock follow the scroll; when the sun sets the whole page — including the app window — switches to Daygo's dark appearance.
 
-## 1. Concept
+## 1. Structure
 
-| Motif | Meaning | Where it shows up |
+| Section | Sky time | What it shows |
 |---|---|---|
-| **Frame** | One discrete screenshot | Hero particles, cursor viewfinder brackets, the screen-wide shutter flash on capture, every thumbnail |
-| **Ribbon** | Frames woven into a timeline | Hero WebGL ribbon, timeline color bars, the visit timeline |
-| **Sun** | The day itself; slices = frames | Logo (sun cut into slices + horizon), the WebGL sun, time-of-day sky colors |
+| Hero | 06:00 dawn | Headline, two CTAs, the Daygo window waiting tilted below |
+| 时间线 / Timeline (pinned) | 09:00 | The window rises and pins; scrolling walks the track through a whole day (09:00 → 22:00), a card opens in the inspector halfway, and the window still being analysed turns into a card at the end |
+| 日报 / Daily | 11:30 | Workflow overview (15-minute cells, distraction track, day total) + the standup |
+| 周报 / Weekly | 14:00 | "Most used per category" treemap + "Time between categories and apps" sankey |
+| 对话 / Chat (preview) | 16:00 | The chat panel answering a question |
+| 原理 / How | 18:40 dusk | Screenshots flow into an AI lens and come out as timeline cards |
+| 起源 / Origin | 19:30 | Dayflow (Swift · macOS) → Daygo (Go · Wails · Vue · macOS / Windows) |
+| 隐私 / Privacy | 20:30 night | Four short points: local first, your own model, blocked apps, keys in Keychain |
+| 下载 / Download | 23:00 midnight | Stars, moon, app icon, download buttons |
 
-The page goes **05:30 dawn → 12:00 noon (light) → 18:40 dusk → 23:30 midnight**. The top HUD clock advances with scroll, and at the end every frame of the day becomes a star.
+Only the opening shows the whole window; every other feature is one component on its own.
 
-## 2. Color
+## 2. Built from the real UI
 
-**Neutrals**: `ink #08080B` · `ink-2 #111116` · `bone #F3EFE7` · `bone-2 #E9E3D7`
+Ported from `Daygo/frontend/src`, not imitated:
 
-**Sky spectrum = category colors** (every color is sampled from the sky at some hour of the day, so it sits in harmony with the background glow):
+- **Tokens and components** → `src/app.css` (tokens.light/dark, TimelineTrack, TimelineActivityCard, GeneratingCard, the timeline footer's review badge (visual only) and copy button, InspectorCardDetail, CardVideoPlayer, DailyWorkflowOverview, WeeklyChartCard/Treemap/Sankey).
+- **Layout maths** → `src/charts.js`: `squarify` (lib/chartLayout.ts), `sankeyLayout` / ribbon paths / gradient stops (lib/sankeyLayout.ts), `appColor` (stores/weeklyCharts.ts). The track uses the app's 2.6 px per minute; the treemap lays out in 800×400 and picks tile tiers from rendered size; the sankey uses Dayflow's 1748×933 columns.
+- **Copy** → `src/i18n.js`, taken from the app's zh-CN and en locales.
 
-| Token | Value | Source in the sky | Category |
-|---|---|---|---|
-| `--sky` | `#5FA8FF` | Daylight blue | Build / coding |
-| `--amber` | `#FFB547` | Sun amber | Meetings |
-| `--dusk` | `#9B8CFF` | Dusk lavender | Research |
-| `--dawn` | `#FF7A59` | Sunrise coral (also the brand accent / REC) | Comms |
-| `--rose` | `#E58BD0` | Twilight orchid | Design |
-| `--ash` | `#8E8C99` | — | System (excluded from totals) |
+Sample data (`src/data.js`) is anonymous but shaped like a real day: gaps between activities, distraction cards and embedded distraction records, two plan blocks drawn as dashed gutter lines, a week with change-vs-last-week per app.
 
-Light/dark themes switch via `[data-theme]`, and the semantic variables stay the same: `--fg / --fg-2 / --fg-3 / --line / --surface`.
+## Language
 
-## 3. Type
+`中 / EN` in the nav switches everything — site copy, app strings, sample data, date and duration formats — and remembers the choice. The first visit follows the browser language.
 
-- **Chinese display**: Noto Serif SC 600, tracking −0.035 to −0.055em, line-height ≈ 1.0
-- **English accent**: Instrument Serif *Italic* (one short English phrase per heading, e.g. *at a glance.*)
-- **UI / body**: Geist + Noto Sans SC
-- **Data / time / labels**: Geist Mono 11–12px, uppercase with +0.08em letter-spacing
+## Type
 
-## 4. Liquid glass material
+Same faces as the app: Figtree for UI, Instrument Serif for titles. In Chinese, display titles use the sans face at 650 (the app's CJK rule); in English, display titles and the period title ("Wed, Sep 30") use Instrument Serif.
 
-- One primitive, `.lg`: low-opacity tint + `backdrop-filter: blur(26px) saturate(170%)` + a 1px semi-transparent edge + a top inner highlight
-- **Lit by the sky**: `main.js` writes the current sun color / horizon color into `--glow` / `--hor` every frame. The glass rim light (`::after` gradient ring) and the outer glow change with the time of day: warm white at noon, orange at dusk
-- At most one layer: panels inside a window use `--lg-dense` (opaque-ish, no blur) to avoid stacking glass on glass
-- Mobile turns off backdrop blur and raises opacity; `forced-colors` falls back to system colors
+## 3. Category palette
 
-## 5. Components (map directly to the app)
+One set for both appearances, matching Daygo's default categories (`--cat-*` in `src/app.css`, hex in `src/data.js`):
 
-- **App window**: traffic lights + center segmented control (时间线 / 回顾, Timeline / Review) + date capsule; 208px sidebar (navigation + today's category durations + recording status)
-- **Vertical timeline**: time column + rail + glowing category dots + tinted cards (`color-mix` 16%); the expanded card shows the frame strip
+| Colour | Category |
+|---|---|
+| `#6E7DF7` | Focus Work 专注工作 |
+| `#78CCEA` | Learning 学习 |
+| `#A15DF6` | Research 研究 |
+| `#F3B292` | Communication 沟通 |
+| `#EB5635` | Distraction 分心 |
+| `#B8E1E2` | Personal 个人 |
 
-- **Timeline band**: rounded-rectangle color blocks + subtle vertical frame texture; selected = solid ink outline; deleted = hatched + dashed outline
-- **Card**: 4px category color bar on top or a 3px bar on the left; mono time range; serif title; editable
-- **Chip**: 999px pill; selected = solid fg fill
-- **Glass panel**: `--surface` + `backdrop-filter: blur(16–20px)` + 1px `--line`
-- **Screenshot thumbnail**: `src/screens.js` draws real-looking work screens (editor with code, terminal, docs site, chat, document, design tool, meeting, lock screen); blocked apps = 45° hatching + "已屏蔽" (Blocked) label
+## 4. Sky
 
-## 6. Motion
+`main.js` maps scroll position to minutes of the day through anchors (section tops), then interpolates a 12-stop palette (`SKY`) into `--sky-top/mid/bot` and `--sun`. The sun travels an arc from 06:00 to 19:10; a horizon haze strengthens when the sun is low; stars (canvas) and the moon fade in after dusk. At 17:50 `html.is-night` and `data-dg-appearance="dark"` flip together.
 
-- Easing: `expo.out` (`cubic-bezier(.16,1,.3,1)`) for entrances; `expo.inOut` for state changes
-- Headings reveal line by line from below; body copy lights up character by character as you read
-- Every capture: REC dot pulses + viewport-corner shutter flash + particle disturbance
-- `prefers-reduced-motion`: animations shut off and the hero is no longer pinned
+## 5. Motion
 
-## 7. Files
+- Easing: `cubic-bezier(.22,1,.36,1)` for settle, `cubic-bezier(.32,.72,0,1)` (the app's `--dg-ease-glide`) for movement
+- Headline lines rise out of a mask with a blur; sections reveal with rise + unblur
+- Lenis smooth scroll; magnetic primary buttons; shine sweep on hover
+- `prefers-reduced-motion`: no smooth scroll, animations collapse to their end state
+
+## 6. Files
 
 ```
-index.html          structure and copy
-src/styles.css      tokens + all styles
-src/gl.js           WebGL: time-of-day sky shader + frame particles (scatter → ribbon → stars)
-src/main.js         Lenis scroll, time-of-day mapping, HUD, loader, cursor, reveals
-src/sections.js     section interactions (capture demo, timeline editing/reprocessing, sundial, vault, fallback chain, menu bar…)
-src/screens.js      procedural screenshot SVGs
+index.html        structure and copy
+src/main.js       scroll, sky, pinned hero, feature mounts, pipeline, reveals
+src/app.js        timeline window + feature components
+src/charts.js     treemap + sankey geometry (ported)
+src/i18n.js       zh / en copy and formatters
+src/app.css       Daygo tokens + component styles
+src/data.js       anonymous sample day / week
+src/styles.css    site styles
 ```
 
 ```bash
 npm run dev     # http://127.0.0.1:5180
-npm run build   # outputs dist/, deployable to any static host
+npm run build   # dist/, deployable to any static host
+npm run deploy  # build and push to gh-pages
 ```
